@@ -176,9 +176,59 @@ public class NHello {
 		System.out.printf(")");
 	}
 	
+	
+	public static int width_of_tree(Node head) {
+		int max = 0;
+		if (head == null)
+			return max;
+		
+		max = 1;
+		int level = 1, counter = 0;
+		int max_level = 1;
+		Node nextend, prend, cur;
+		LinkedList<Node> fifo = new LinkedList<Node>();
+		
+		fifo.addFirst(head);
+		nextend = head;
+		prend = head;
+		while (fifo.size() != 0) {
+			cur = fifo.pollLast();
+			counter += 1;
+			
+			if (cur.left != null) {
+				fifo.addFirst(cur.left);
+				nextend = cur.left;
+			}
+			
+			if (cur.right != null) {
+				fifo.addFirst(cur.right);
+				nextend = cur.right;
+			}
+			
+			// judge current node weather is the last of this level
+			if (cur == prend) {
+				if (counter > max) {
+					max = counter;
+					max_level = level;
+				}
+				
+				// prepare for counting next level
+				level += 1;
+				counter = 0;
+				prend = nextend;
+			}			
+		}
+		
+		System.out.printf("The widthest level: %d, number of nodes: %d\n", 
+				max_level, max);
+		
+		return max;
+	}
+	
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		String mytree = "A(B(M,N),C(E(G,H),F))";
+		String mytree = "A(B(M(I,L),N),C(E(G,H),Q(K,J))";
 		
 		Node head = stack_construct_tree(mytree);
 		
@@ -201,6 +251,7 @@ public class NHello {
 		level_traversal(head);
 		System.out.println();
 		
+		width_of_tree(head);
 	}
 
 }
